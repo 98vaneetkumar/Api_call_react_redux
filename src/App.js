@@ -1,23 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { useSelector, useDispatch } from "react-redux";
+import { todo } from "../src/redux/slices/TodoSlice";
 
 function App() {
+  //This is for call the action method
+  const dispatch = useDispatch();
+  //This is for use the data that is store data in state variables
+  const state = useSelector((state) => state);
+  if (state.todo.isLoading) {
+    return <h1>Loading......</h1>;
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <button onClick={(e) => dispatch(todo())}>Fetch data</button>
+      <div className="products-container">
+        <ul>
+          {state.todo.data &&
+            state.todo.data.map((e) => (
+              <li key={e.id}>
+                <span>{e.category}</span>
+                <img
+                  src={e.imageUrl}
+                  alt={e.title}
+                  style={{ width: "200px" }}
+                />
+                <span>{e.title}</span>
+              </li>
+            ))}
+        </ul>
+      </div>
     </div>
   );
 }
